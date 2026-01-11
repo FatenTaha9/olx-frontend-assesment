@@ -50,6 +50,12 @@ export const translations: Translations = {
     MobilePhones: 'Mobile Phones',
     PropertyForSale: 'Property For Sale',
     CarsForSale: 'Cars For Sale',
+    hour: 'Hour',
+    second: 'Second',
+    minute: 'Minute',
+    day: 'Day',
+    ago: 'Ago',
+    s:'s'
   },
   ar: {
     // Navigation
@@ -98,5 +104,11 @@ export const translations: Translations = {
     MobilePhones: 'هواتف محمولة',
     PropertyForSale: 'عقارات للبيع',
     CarsForSale: 'سيارات للبيع',
+     hour: 'ساعة',
+    second: 'ثانية',
+    minute: 'دقيقة',
+    day: 'يوم',
+    ago: 'منذ',
+    s:''
   },
 };
