@@ -1,0 +1,86 @@
+.singleSelectContainer {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  background-color: #fff;
+  z-index: 1; /* Default stacking order */
+}
+
+.dropdown:hover {
+  border-color: #007bff;
+}
+
+.dropdown.active {
+  z-index: 10; /* Higher stacking order for active dropdown */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropdownIcon {
+  margin-right: 10px;
+}
+
+.dropdownPlaceholder {
+  flex: 1;
+  color: #6c757d;
+}
+
+.dropdownContent {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow to differentiate dropdown */
+  z-index: 10; /* Ensure dropdown appears above other elements */
+  overflow: hidden; /* Keep content clean */
+}
+
+.searchInput {
+  width: calc(100% - 20px);
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  box-sizing: border-box;
+  z-index: 10; /* Match dropdown content z-index */
+}
+
+.dropdownList {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dropdownItem {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdownItem.selected {
+  background-color: #007bff;
+  color: #fff;
+}
