@@ -6,22 +6,22 @@ export const translations: Translations = {
   en: {
     // Navigation
     home: 'Home',
-    postAd: 'Post an Ad',
+    postAd: 'Post your Ad',
     search: 'Search',
-    
+
     // Common
     location: 'Location',
     price: 'Price',
     category: 'Category',
     featured: 'Featured',
-    
+
     // Home Page
     allCategories: 'All Categories',
     recentAds: 'Recent Ads',
     viewMore: 'View More',
-    
+
     // Post Ad
-    selectCategory: 'Select a Category',
+    selectCategory: 'Choose a Category',
     selectedCategory: 'Selected Category',
     changeCategory: 'Change Category',
     adDetails: 'Ad Details',
@@ -35,34 +35,39 @@ export const translations: Translations = {
     selectPlaceholder: 'Select an option',
     next: 'Next',
     back: 'Back',
-    
+
     // Categories (common ones)
     cars: 'Cars',
     properties: 'Properties',
     mobiles: 'Mobile Phones',
     electronics: 'Electronics',
-    
+
     // Form
     fillAllRequired: 'Please fill all required fields',
     adPosted: 'Ad posted successfully',
+
+    //Ad types
+    MobilePhones: 'Mobile Phones',
+    PropertyForSale: 'Property For Sale',
+    CarsForSale: 'Cars For Sale',
   },
   ar: {
     // Navigation
     home: 'الرئيسية',
     postAd: 'انشر إعلانك',
     search: 'بحث',
-    
+
     // Common
     location: 'الموقع',
     price: 'السعر',
     category: 'الفئة',
     featured: 'مميز',
-    
+
     // Home Page
     allCategories: 'جميع الفئات',
     recentAds: 'إعلانات حديثة',
     viewMore: 'عرض المزيد',
-    
+
     // Post Ad
     selectCategory: 'اختر فئة',
     selectedCategory: 'الفئة المختارة',
@@ -78,15 +83,20 @@ export const translations: Translations = {
     selectPlaceholder: 'اختر خياراً',
     next: 'التالي',
     back: 'رجوع',
-    
+
     // Categories (common ones)
     cars: 'سيارات',
     properties: 'عقارات',
     mobiles: 'هواتف محمولة',
     electronics: 'إلكترونيات',
-    
+
     // Form
     fillAllRequired: 'يرجى ملء جميع الحقول المطلوبة',
     adPosted: 'تم نشر الإعلان بنجاح',
+
+    //Ad types
+    MobilePhones: 'هواتف محمولة',
+    PropertyForSale: 'عقارات للبيع',
+    CarsForSale: 'سيارات للبيع',
   },
 };

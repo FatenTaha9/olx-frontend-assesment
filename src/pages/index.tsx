@@ -5,8 +5,9 @@ import { Layout } from '@/components/layout/Layout';
 import { AdCard } from '@/components/home/AdCard';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Ad } from '@/types/ad';
-import { mockAds } from '@/constants/mockAds';
+import { mockAds, adsTypes } from '@/constants/mockAds';
 import styles from '@/styles/pages/Home.module.css';
+import React from 'react';
 
 interface HomeProps {
   ads: Ad;
@@ -19,26 +20,24 @@ export default function Home({ ads }: HomeProps) {
     <Layout>
       <div className={styles.home}>
         <div className="container">
-          <section className={styles.hero}>
-            <h1 className={styles.heroTitle}>
-              {t('home')}
-            </h1>
-          </section>
 
           <section className={styles.adsSection}>
             <div className={styles.adsGrid}>
-              {ads?.map((adType) => (
-                adType.ads.map((ad, index) => (
-                  <>
-                  {index === 0 && (
-                    <h2 key={adType.type} className={styles.adTypeHeader}>
-                      {adType.type}
-                    </h2>
-                  )}
-                    <AdCard key={ad.ad_external_id} ad={ad} />
-                  </>
-                ))
-              ))}
+              {ads?.map((adType) =>
+                adType.ads.map((ad, index) => {
+                  const typeName =
+                    adsTypes.find((t) => t.id === adType.type)?.name ?? String(adType.type);
+
+                  return (
+                    <React.Fragment key={ad.ad_external_id}>
+                      {index === 0 && (
+                        <h2 className={styles.adTypeHeader}>   {t(`${typeName}`)}</h2>
+                      )}
+                      <AdCard key={ad.ad_external_id} ad={ad} />
+                    </React.Fragment>
+                  );
+                })
+              )}
             </div>
           </section>
 

@@ -17,7 +17,7 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   color: var(--color-text-primary);
-  background-color: var(--color-background);
+  background-color: var(--color-white);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,6 +26,11 @@ body {
 /* Arabic font family */
 [dir='rtl'] body {
   font-family: var(--font-family-ar);
+}
+
+header,
+.header {
+  background-color: var(--color-background);
 }
 
 a {
@@ -57,8 +62,7 @@ select {
 .container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  /* reduced horizontal padding site-wide */
-  padding: 0 12px; /* previously: 0 var(--spacing-md) */
+  padding: 0 12px;
 }
 
 .visually-hidden {

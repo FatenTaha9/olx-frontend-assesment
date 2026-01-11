@@ -1,19 +1,20 @@
-// src/utils/api.ts
 
 import { Category, CategoryFieldsResponse } from '@/types/category';
 
 const BASE_URL = 'https://www.olx.com.lb/api';
 
-/**
- * Fetch all categories from OLX API
- */
+const FETCH_CATEGORIES = '/categories';
+const FETCH_CATEGORY_FIELDS = '/categoryFields';
+
+
 export const fetchCategories = async (): Promise<Category[]> => {
   try {
-    const response = await fetch(`${BASE_URL}/categories`);
+    const response = await fetch(`${BASE_URL}${FETCH_CATEGORIES}`);
     if (!response.ok) {
       throw new Error('Failed to fetch categories');
     }
     const data: Category[] = await response.json();
+    console.log('Fetched Categories:', data);
     return data;
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -42,7 +43,7 @@ export const fetchCategoryFields = async (
       flat: 'true',
     });
 
-    const response = await fetch(`${BASE_URL}/categoryFields?${params}`);
+    const response = await fetch(`${BASE_URL}${FETCH_CATEGORY_FIELDS}?${params}`);
     if (!response.ok) {
       throw new Error('Failed to fetch category fields');
     }

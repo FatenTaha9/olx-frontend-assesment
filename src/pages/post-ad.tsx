@@ -1,7 +1,6 @@
 // src/pages/post-ad.tsx
 
 import React, { useState, useEffect } from 'react';
-import { GetServerSideProps } from 'next';
 import { Layout } from '@/components/layout/Layout';
 import { CategorySelector } from '@/components/post-ad/CategorySelector';
 import { FormField } from '@/components/shared/FormField';
@@ -10,15 +9,13 @@ import { Category, CategoryField, FormData } from '@/types/category';
 import { fetchCategories, fetchCategoryFields } from '@/utils/api';
 import styles from '@/styles/pages/PostAd.module.css';
 
-interface PostAdProps {
-  categories: Category[];
-}
-
-export default function PostAd({ categories }: PostAdProps) {
+export default function PostAd() {
   const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [fields, setFields] = useState<CategoryField[]>([]);
   const [formData, setFormData] = useState<FormData>({});
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -28,17 +25,33 @@ export default function PostAd({ categories }: PostAdProps) {
     }
   }, [selectedCategory]);
 
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      setCategoriesLoading(true);
+      try {
+        const data = await fetchCategories();
+        if (mounted) setCategories(data || []);
+      } catch (err) {
+        console.error('Client: error fetching categories', err);
+      } finally {
+        if (mounted) setCategoriesLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
+
   const loadCategoryFields = async (categorySlug: string) => {
     setLoading(true);
     try {
       const response = await fetchCategoryFields(categorySlug);
-      
+
       // Log to debug
       console.log('Category Fields Response:', response);
-      
+
       // The response structure varies, try to extract fields
       let extractedFields: CategoryField[] = [];
-      
+
       // Try different response structures
       if (response.data && Array.isArray(response.data)) {
         extractedFields = response.data;
@@ -55,10 +68,10 @@ export default function PostAd({ categories }: PostAdProps) {
           }
         }
       }
-      
+
       console.log('Extracted Fields:', extractedFields);
       setFields(extractedFields);
-      
+
       // Initialize form data with default values
       const initialData: FormData = {};
       extractedFields.forEach((field) => {
@@ -90,7 +103,7 @@ export default function PostAd({ categories }: PostAdProps) {
       ...prev,
       [fieldName]: value,
     }));
-    
+
     // Clear error for this field
     if (errors[fieldName]) {
       setErrors((prev) => {
@@ -103,11 +116,11 @@ export default function PostAd({ categories }: PostAdProps) {
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
-    
+
     fields.forEach((field) => {
       if (field.required) {
         const value = formData[field.name];
-        
+
         if (
           value === undefined ||
           value === '' ||
@@ -117,14 +130,14 @@ export default function PostAd({ categories }: PostAdProps) {
         }
       }
     });
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       // Ad submission is not required to work per PDF
       alert('Form is valid! (Submission not implemented as per requirements)');
@@ -143,17 +156,25 @@ export default function PostAd({ categories }: PostAdProps) {
     <Layout>
       <div className={styles.postAd}>
         <div className="container">
-          <div className={styles.header}>
-            <h1 className={styles.title}>{t('postAd')}</h1>
-          </div>
+
 
           <div className={styles.content}>
+
+            <div className={styles.header}>
+              <h1 className={styles.title}>{t('postAd')}</h1>
+            </div>
             {!selectedCategory ? (
-              <CategorySelector
-                categories={categories}
-                onSelectCategory={handleCategorySelect}
-                selectedCategory={selectedCategory}
-              />
+              categoriesLoading ? (
+                <div className={styles.loading}>
+                  {t('loadingCategories') || 'Loading categories...'}
+                </div>
+              ) : (
+                <CategorySelector
+                  categories={categories}
+                  onSelectCategory={handleCategorySelect}
+                  selectedCategory={selectedCategory}
+                />
+              )
             ) : (
               <div className={styles.formContainer}>
                 <div className={styles.selectedCategoryHeader}>
@@ -212,21 +233,3 @@ export default function PostAd({ categories }: PostAdProps) {
     </Layout>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const categories = await fetchCategories();
-    return {
-      props: {
-        categories: categories || [],
-      },
-    };
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    return {
-      props: {
-        categories: [],
-      },
-    };
-  }
-};

@@ -72,7 +72,7 @@ export type adsTypes = 'car' | 'property' | 'mobile';
 
 // Backwards-compatible discriminated Ad union matching mockAds structure
 export type AdItem = {
-  type: adsTypes;
+  type: 1 | 2 | 3;
   ads: CarAd[] | PropertyAd[] | MobileAd[];
 }
 
