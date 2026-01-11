@@ -1,0 +1,152 @@
+/* src/styles/pages/PostAd.module.css */
+
+.postAd {
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--spacing-xl) 0;
+}
+
+.header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.formContainer {
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+}
+
+.selectedCategoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.selectedCategoryLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.selectedCategoryName {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.changeCategoryButton {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-white);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.changeCategoryButton:hover {
+  background-color: var(--color-background);
+  border-color: var(--color-primary);
+}
+
+.loading {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formFields {
+  margin-bottom: var(--spacing-xl);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.submitButton,
+.cancelButton {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+}
+
+.submitButton {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.submitButton:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.cancelButton {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.cancelButton:hover {
+  background-color: var(--color-background);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .postAd {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .formContainer {
+    padding: var(--spacing-lg);
+  }
+
+  .selectedCategoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+  }
+
+  .submitButton,
+  .cancelButton {
+    width: 100%;
+  }
+}

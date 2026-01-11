@@ -1,0 +1,126 @@
+/* src/styles/components/FormField.module.css */
+
+.fieldWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.required {
+    color: var(--color-error);
+    font-weight: var(--font-weight-bold);
+}
+
+.input,
+.textarea,
+.select {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    background-color: var(--color-white);
+    transition: all var(--transition-fast);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 47, 52, 0.1);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: var(--color-text-muted);
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23406367' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-md) center;
+    padding-right: var(--spacing-xl);
+}
+
+[dir='rtl'] .select {
+    background-position: left var(--spacing-md) center;
+    padding-right: var(--spacing-md);
+    padding-left: var(--spacing-xl);
+}
+
+.radioGroup,
+.checkboxGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.radioLabel,
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-fast);
+}
+
+.radioLabel:hover,
+.checkboxLabel:hover {
+    background-color: var(--color-background);
+}
+
+.radioInput,
+.checkboxInput {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+}
+
+.rangeContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.range {
+    flex: 1;
+    height: 6px;
+    border-radius: var(--radius-sm);
+    background: var(--color-border);
+    outline: none;
+    accent-color: var(--color-primary);
+}
+
+.rangeValue {
+    min-width: 50px;
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+}
+
+.error {
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+}
