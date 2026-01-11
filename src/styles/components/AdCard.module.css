@@ -1,4 +1,3 @@
-
 .card {
   background-color: var(--color-white);
   border-radius: var(--radius-md);
@@ -20,7 +19,7 @@
 .imageContainer {
   position: relative;
   width: 100%;
-  padding-top: 75%; /* 4:3 Aspect Ratio */
+  padding-top: 75%;
   overflow: hidden;
   background-color: var(--color-background);
 }
@@ -37,24 +36,6 @@
 
 .card:hover .image {
   transform: scale(1.05);
-}
-
-.featuredBadge {
-  position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-  background-color: var(--color-accent);
-  color: var(--color-primary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-}
-
-[dir='rtl'] .featuredBadge {
-  right: auto;
-  left: var(--spacing-sm);
 }
 
 .content {

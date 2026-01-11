@@ -1,50 +1,75 @@
-// src/types/category.ts
-
 export interface Category {
   id: number;
   name: string;
   slug: string;
   icon?: string;
   children?: Category[];
-  parentId?: number;
+  parentID?: number;
 }
 
 export interface CategoryResponse {
   data: Category[];
 }
 
-// Field types from OLX API
-export type FieldType =
-  | 'text'
-  | 'number'
-  | 'select'
-  | 'multiselect'
-  | 'checkbox'
-  | 'radio'
-  | 'range'
-  | 'textarea';
+// Field value types from OLX API
+export type FieldValueType =
+  | 'enum'
+  | 'enum_multiple'
+  | 'string'
+  | 'integer'
+  | 'float';
+
+// Filter types from OLX API
+export type FilterType =
+  | 'single_choice'
+  | 'multiple_choice'
+  | 'range';
 
 export interface FieldChoice {
-  id: string | number;
-  label: string;
+  id: number | string;
   value: string;
+  label: string;
+  label_l1?: string;
+  slug?: string;
+  seoSlug?: {
+    en: string;
+    ar: string;
+  };
+  extraFields?: Record<string, unknown>;
+  displayPriority?: number;
+  popularityRank?: number;
+  roles?: string[];
+}
+
+export interface ChoiceGroup {
+  label: string;
+  label_l1: string;
+  displayPriority: number;
+  choices: {
+    all: FieldChoice[];
+  };
+  id: string;
 }
 
 export interface CategoryField {
-  id: string;
+  id: number;
   name: string;
-  label: string;
-  type: FieldType;
-  required: boolean;
-  placeholder?: string;
+  attribute: string;
+  valueType: FieldValueType;
+  filterType: FilterType;
+  isMandatory: boolean;
+  roles: string[];
   choices?: FieldChoice[];
-  min?: number;
-  max?: number;
-  step?: number;
-  validation?: {
-    pattern?: string;
-    message?: string;
-  };
+  choiceGroups?: Record<string, ChoiceGroup>;
+  minValue?: number | null;
+  maxValue?: number | null;
+  minLength?: number | null;
+  maxLength?: number | null;
+  categoryID: number;
+  groupIndex: number;
+  paaSection?: number | null;
+  displayPriority: number;
+  state: string;
 }
 
 export interface CategoryFieldsResponse {
@@ -52,7 +77,6 @@ export interface CategoryFieldsResponse {
     flatFields: CategoryField[];
   };
 }
-
 export interface FormData {
   [fieldName: string]: string | number | string[] | boolean;
 }

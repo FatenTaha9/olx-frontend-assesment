@@ -18,6 +18,8 @@ export default function PostAd() {
   const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false);
+  const [previewJson, setPreviewJson] = useState<string>('');
 
   useEffect(() => {
     if (selectedCategory) {
@@ -45,11 +47,8 @@ export default function PostAd() {
     setLoading(true);
     try {
       const response = await fetchCategoryFields(categorySlug);
-
-      // Log to debug
       console.log('Category Fields Response:', response);
 
-      // The response structure varies, try to extract fields
       let extractedFields: CategoryField[] = [];
 
       // Try different response structures
@@ -75,12 +74,21 @@ export default function PostAd() {
       // Initialize form data with default values
       const initialData: FormData = {};
       extractedFields.forEach((field) => {
-        if (field.type === 'checkbox') {
-          initialData[field.name] = [];
-        } else if (field.type === 'number' || field.type === 'range') {
-          initialData[field.name] = field.min || 0;
+        // Skip fields excluded from post an ad
+        if (field.roles && field.roles.includes('exclude_from_post_an_ad')) {
+          return;
+        }
+        
+        // Use attribute as the key (like 'make', 'year', etc.)
+        const fieldKey = field.attribute;
+        
+        if (field.valueType === 'enum_multiple' || 
+            (field.valueType === 'enum' && field.filterType === 'multiple_choice')) {
+          initialData[fieldKey] = [];
+        } else if (field.valueType === 'integer' || field.valueType === 'float') {
+          initialData[fieldKey] = field.minValue || 0;
         } else {
-          initialData[field.name] = '';
+          initialData[fieldKey] = '';
         }
       });
       setFormData(initialData);
@@ -98,17 +106,17 @@ export default function PostAd() {
     setErrors({});
   };
 
-  const handleFieldChange = (fieldName: string, value: string | number | string[] | boolean) => {
+  const handleFieldChange = (fieldAttribute: string, value: string | number | string[] | boolean) => {
     setFormData((prev) => ({
       ...prev,
-      [fieldName]: value,
+      [fieldAttribute]: value,
     }));
 
     // Clear error for this field
-    if (errors[fieldName]) {
+    if (errors[fieldAttribute]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
-        delete newErrors[fieldName];
+        delete newErrors[fieldAttribute];
         return newErrors;
       });
     }
@@ -118,15 +126,20 @@ export default function PostAd() {
     const newErrors: { [key: string]: string } = {};
 
     fields.forEach((field) => {
-      if (field.required) {
-        const value = formData[field.name];
+      // Skip fields excluded from post an ad
+      if (field.roles && field.roles.includes('exclude_from_post_an_ad')) {
+        return;
+      }
+      
+      if (field.isMandatory) {
+        const value = formData[field.attribute];
 
         if (
           value === undefined ||
           value === '' ||
           (Array.isArray(value) && value.length === 0)
         ) {
-          newErrors[field.name] = `${field.label} ${t('required')}`;
+          newErrors[field.attribute] = `${field.name} ${t('required')}`;
         }
       }
     });
@@ -139,9 +152,11 @@ export default function PostAd() {
     e.preventDefault();
 
     if (validateForm()) {
-      // Ad submission is not required to work per PDF
-      alert('Form is valid! (Submission not implemented as per requirements)');
-      console.log('Form Data:', formData);
+      // prepare preview JSON and open dialog instead of submitting
+      const json = JSON.stringify(formData, null, 2);
+      setPreviewJson(json);
+      setPreviewOpen(true);
+      console.log('Form Data (preview):', formData);
     }
   };
 
@@ -156,10 +171,7 @@ export default function PostAd() {
     <Layout>
       <div className={styles.postAd}>
         <div className="container">
-
-
           <div className={styles.content}>
-
             <div className={styles.header}>
               <h1 className={styles.title}>{t('postAd')}</h1>
             </div>
@@ -200,15 +212,18 @@ export default function PostAd() {
                 ) : (
                   <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.formFields}>
-                      {fields.map((field) => (
-                        <FormField
-                          key={field.id}
-                          field={field}
-                          value={formData[field.name]}
-                          onChange={(value) => handleFieldChange(field.name, value)}
-                          error={errors[field.name]}
-                        />
-                      ))}
+                      {fields
+                        .filter(f => !f.roles.includes('exclude_from_post_an_ad'))
+                        .sort((a, b) => a.displayPriority - b.displayPriority)
+                        .map((field) => (
+                          <FormField
+                            key={field.id}
+                            field={field}
+                            value={formData[field.attribute] ?? ''}
+                            onChange={(value: string | number | boolean | string[]) => handleFieldChange(field.attribute, value)}
+                            error={errors[field.attribute]}
+                          />
+                        ))}
                     </div>
 
                     <div className={styles.formActions}>
@@ -230,6 +245,106 @@ export default function PostAd() {
           </div>
         </div>
       </div>
+
+      {/* Preview Modal */}
+      {previewOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+            padding: 16,
+          }}
+          onClick={() => setPreviewOpen(false)}
+        >
+          <div
+            role="document"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%',
+              maxWidth: 900,
+              maxHeight: '80vh',
+              background: 'var(--color-white)',
+              borderRadius: 8,
+              padding: 20,
+              boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+              overflow: 'auto',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <h3 style={{ margin: 0 }}>{t('preview') || 'Preview'}</h3>
+              <button
+                type="button"
+                onClick={() => setPreviewOpen(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: 18,
+                  cursor: 'pointer',
+                }}
+                aria-label="Close preview"
+              >
+                ✕
+              </button>
+            </div>
+
+            <pre
+              style={{
+                background: '#f6f7f8',
+                padding: 12,
+                borderRadius: 6,
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                fontSize: 13,
+                maxHeight: '60vh',
+                overflow: 'auto',
+              }}
+            >
+              {previewJson}
+            </pre>
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(previewJson).catch(() => {});
+                }}
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 6,
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-white)',
+                  cursor: 'pointer',
+                }}
+              >
+                {t('copy') || 'Copy'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPreviewOpen(false);
+                }}
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 6,
+                  border: 'none',
+                  background: 'var(--color-primary)',
+                  color: 'var(--color-white)',
+                  cursor: 'pointer',
+                }}
+              >
+                {t('close') || 'Close'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }

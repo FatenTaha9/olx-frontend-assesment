@@ -12,7 +12,6 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-/* New: category tiles (cards) view container */
 .categoryTilesContainer {
   padding: var(--spacing-lg);
 }
@@ -51,7 +50,6 @@
   display: inline-block;
 }
 
-/* optional small title next to image */
 .categoryCardTitle {
   font-size: var(--font-size-lg);
   color: var(--color-text-primary);
