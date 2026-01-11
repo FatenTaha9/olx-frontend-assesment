@@ -22,20 +22,13 @@ export const fetchCategories = async (): Promise<Category[]> => {
   }
 };
 
-/**
- * Fetch category fields based on category slugs
- * @param categorySlugs - Array of category slugs or single slug
- */
 export const fetchCategoryFields = async (
-  categorySlugs: string | string[]
+  categorySlug: string
 ): Promise<CategoryFieldsResponse> => {
   try {
-    const slugsParam = Array.isArray(categorySlugs)
-      ? categorySlugs.join(',')
-      : categorySlugs;
 
     const params = new URLSearchParams({
-      categorySlugs: slugsParam,
+      categorySlugs: categorySlug,
       includeChildCategories: 'true',
       splitByCategoryIDs: 'true',
       flatChoices: 'true',

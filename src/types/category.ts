@@ -14,12 +14,12 @@ export interface CategoryResponse {
 }
 
 // Field types from OLX API
-export type FieldType = 
-  | 'text' 
-  | 'number' 
-  | 'select' 
-  | 'multiselect' 
-  | 'checkbox' 
+export type FieldType =
+  | 'text'
+  | 'number'
+  | 'select'
+  | 'multiselect'
+  | 'checkbox'
   | 'radio'
   | 'range'
   | 'textarea';
@@ -49,7 +49,7 @@ export interface CategoryField {
 
 export interface CategoryFieldsResponse {
   [categoryId: string]: {
-    fields: CategoryField[];
+    flatFields: CategoryField[];
   };
 }
 

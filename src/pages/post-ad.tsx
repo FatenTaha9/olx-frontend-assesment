@@ -61,8 +61,8 @@ export default function PostAd() {
         // Response is split by category IDs
         const firstKey = Object.keys(response)[0];
         if (firstKey && response[firstKey]) {
-          if (response[firstKey].fields) {
-            extractedFields = response[firstKey].fields;
+          if (response[firstKey].flatFields) {
+            extractedFields = response[firstKey].flatFields;
           } else if (Array.isArray(response[firstKey])) {
             extractedFields = response[firstKey];
           }
